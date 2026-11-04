@@ -1,240 +1,83 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>CTRL+Z｜平行人生實驗室</title>
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080d20;color:white;font-family:Arial,"Microsoft JhengHei",sans-serif}
-a-scene{position:fixed!important;inset:0;width:100%!important;height:100%!important;z-index:0}
-#shade{position:fixed;inset:0;background:linear-gradient(180deg,rgba(5,8,25,.65),transparent 35%,rgba(5,8,25,.8));pointer-events:none;z-index:1}
-#ui{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;justify-content:space-between;padding:calc(20px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom))}
-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-h1{font-size:32px;letter-spacing:4px;margin:0}
-small{letter-spacing:3px;color:#b9e9ff}
-#status{font-size:12px;border:1px solid #8fdfff;padding:10px;border-radius:24px;background:#14213cbb}
-#portal{position:absolute;top:37%;left:50%;transform:translate(-50%,-50%);width:min(72vw,330px);aspect-ratio:1;border:8px solid #a4efff;border-radius:50%;box-shadow:0 0 25px #62dfff,0 0 80px #db83ff,inset 0 0 55px #a78aff;background:radial-gradient(circle,#d9a5ff77,#4a6eff44 40%,transparent 70%);animation:spin 6s linear infinite;pointer-events:none;display:none}
-#portal:after{content:"另一個你";position:absolute;inset:0;display:grid;place-items:center;font-size:25px;text-shadow:0 0 20px white;animation:pulse 2s infinite}
-@keyframes spin{50%{box-shadow:0 0 55px #ff8cdb,0 0 100px #67e8ff,inset 0 0 50px #f4aaff}}
-@keyframes pulse{50%{opacity:.5;transform:scale(1.08)}}
-#panel{background:linear-gradient(135deg,#132441ee,#2d193fee);border:1px solid #91dfff88;border-radius:25px;padding:22px;box-shadow:0 0 35px #83dfff33;max-height:55vh;overflow-y:auto;backdrop-filter:blur(12px)}
-#panel h2{font-size:23px;margin:8px 0 14px}
-#story{font-size:15px;line-height:1.8;color:#e4edff}
-button{display:block;width:100%;padding:15px;margin-top:11px;border:1px solid #b2eaff99;border-radius:15px;background:linear-gradient(100deg,#9deaff,#e5b0ff);color:#16213a;font-size:16px;font-weight:bold;cursor:pointer}
-button.secondary{background:#ffffff18;color:white}
-#stats{display:none;gap:8px;justify-content:space-between;margin:10px 0;font-size:12px;color:#c8eaff}
-#foot{text-align:center;font-size:12px;color:#d3dcff;margin-top:12px}
- 
-/* CTRL+Z 全螢幕 AR 放大版 */
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-a-scene,
-.mindar-ui-overlay,
-video,
-.a-canvas {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-a-scene {
-  position: fixed !important;
-  inset: 0 !important;
-}
-
-#ui {
-  padding: calc(12px + env(safe-area-inset-top)) 12px
-           calc(10px + env(safe-area-inset-bottom));
-}
-
-#portal {
-  top: 39%;
-  width: min(92vw, 490px);
-  border-width: 12px;
-}
-
-#panel {
-  max-height: 38vh;
-  padding: 14px;
-  border-radius: 20px;
-}
-
-#panel h2 {
-  font-size: 20px;
-  margin: 5px 0 8px;
-}
-
-#story {
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-#choices button {
-  padding: 11px;
-  margin-top: 7px;
-}
-
-#foot {
-  display: none;
-}
-
-</style>
- 
-/* 修正 AR 相機全螢幕 */
-html, body {
-  margin: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  overflow: hidden !important;
-}
-
-a-scene,
-a-scene canvas,
-a-scene video {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100dvh !important;
-}
-
-a-scene video {
-  object-fit: cover !important;
-}
-
-#ui {
-  height: 100dvh !important;
-}
+:root{--cyan:#a8f5ff;--pink:#ffc3e8;--bg:#0b1020}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:white;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;overflow:hidden}
+a-scene{position:fixed!important;inset:0;z-index:0}
+#shade{position:fixed;inset:0;background:linear-gradient(180deg,rgba(5,9,22,.84),rgba(5,9,22,.18) 35%,rgba(5,9,22,.87));pointer-events:none;z-index:1}
+#ui{position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:max(18px,env(safe-area-inset-top)) 18px max(22px,env(safe-area-inset-bottom));pointer-events:none}
+header,.panel,.foot{pointer-events:auto}header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.logo{font-size:25px;font-weight:900;letter-spacing:.14em;text-shadow:0 0 24px #9cecff}.tag{font-size:10px;letter-spacing:.24em;color:#d3e9ff}.chip{border:1px solid #ffffff66;background:#11192ab8;border-radius:99px;padding:9px 12px;font-size:11px;max-width:50%;text-align:right}
+.panel{width:min(100%,470px);margin:auto auto 0;border:1px solid #a6e8ff78;border-radius:22px;background:linear-gradient(145deg,#18233de8,#26182ce8);padding:21px;box-shadow:0 0 35px #6db9fa32;backdrop-filter:blur(15px)}
+.kicker{color:var(--cyan);letter-spacing:.24em;font-size:11px;font-weight:800}h1{font-size:25px;line-height:1.35;margin:10px 0}p{font-size:14px;line-height:1.75;color:#e2e8f7;margin:10px 0 18px}
+button{border:1px solid #a6e8ff7a;border-radius:13px;padding:13px 14px;color:white;background:#ffffff12;font:inherit;font-weight:700;cursor:pointer}
+button.primary{background:linear-gradient(110deg,#a5edff,#e8b8ff);color:#18213a;border:0}
+button:active{transform:scale(.98)}.choices{display:grid;gap:9px}.row{display:flex;gap:9px}.row>*{flex:1}
+.stat{display:grid;grid-template-columns:45px 1fr 25px;align-items:center;gap:8px;font-size:12px;margin:8px 0}.track{height:6px;border-radius:20px;background:#ffffff29;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#9beaff,#ffc3ed);transition:width .4s}
+.foot{font-size:11px;text-align:center;color:#d9e5ffb5;padding-top:12px}.hidden{display:none!important}
+#posterPreview{position:fixed;inset:0;background:#0b1020 url('poster.png') center/contain no-repeat;z-index:0;opacity:.28;pointer-events:none}
+#toast{position:fixed;top:82px;left:50%;transform:translateX(-50%);background:#10182de8;border:1px solid #9cecff80;border-radius:12px;padding:9px 12px;font-size:12px;z-index:3;max-width:90%;text-align:center;pointer-events:none}
+@media(min-width:650px){.panel{margin:auto}.logo{font-size:32px}}
 </style>
 </head>
 <body>
-<a-scene
- mindar-image="imageTargetSrc: ./targets.mind; autoStart: true; uiScanning: yes; uiLoading: yes"
- color-space="sRGB"
- renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true"
- vr-mode-ui="enabled: false"
- device-orientation-permission-ui="enabled: false">
- <a-assets></a-assets>
+<div id="posterPreview"></div>
+<a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: false; uiLoading: no; uiScanning: no; uiError: no;"
+ embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
  <a-entity id="target" mindar-image-target="targetIndex: 0">
-  <a-torus position="0 0 0.08" radius="0.65" radius-tubular="0.025" color="#85eaff" material="emissive:#85eaff;emissiveIntensity:1.5" animation="property:rotation;to:0 0 360;loop:true;dur:9000;easing:linear"></a-torus>
-  <a-torus position="0 0 0.09" radius="0.52" radius-tubular="0.012" color="#ff9fe5" animation="property:rotation;to:0 0 -360;loop:true;dur:6500;easing:linear"></a-torus>
-  <a-text value="CTRL+Z" align="center" color="#ffffff" width="2" position="0 0 0.13"></a-text>
+   <a-ring position="0 0 .04" radius-inner=".32" radius-outer=".35" color="#a7edff" opacity=".85" rotation="0 0 0"
+      animation="property: rotation; to: 0 0 360; dur: 6500; loop: true; easing: linear"></a-ring>
+   <a-ring position="0 0 .05" radius-inner=".43" radius-outer=".45" color="#ffc1eb" opacity=".65"
+      animation="property: rotation; to: 0 0 -360; dur: 8500; loop: true; easing: linear"></a-ring>
+   <a-box position="0 0 .13" depth=".06" height=".4" width=".27" color="#96e7ff" opacity=".32"
+      animation="property: rotation; to: 0 360 0; dur: 5000; loop: true; easing: linear"></a-box>
+   <a-text value="CTRL + Z" align="center" color="#ffffff" width="1.7" position="0 .36 .1"></a-text>
+   <a-text value="PARALLEL LIFE" align="center" color="#b9efff" width="1.15" position="0 -.38 .1"></a-text>
  </a-entity>
 </a-scene>
 <div id="shade"></div>
+<div id="toast" class="hidden"></div>
 <div id="ui">
- <header>
-  <div><h1>CTRL+Z</h1><small>PARALLEL LIFE LAB</small></div>
-  <div id="status">尋找命運海報中</div>
- </header>
- <div id="portal"></div>
- <div>
-  <div id="stats"><span id="courage">勇氣 0</span><span id="freedom">自由 0</span><span id="bond">關係 0</span></div>
-  <section id="panel">
-   <small id="chapter">WELCOME</small>
-   <h2 id="heading">如果人生可以重選？</h2>
-   <div id="story">把相機對準 CTRL+Z 海報，解鎖另一條人生路線。你也可以先體驗劇情。</div>
-   <div id="choices">
-    <button onclick="startGame()">開始人生實驗</button>
-   </div>
-  </section>
-  <div id="foot">每一個選擇都有代價，沒有完美人生。</div>
- </div>
+<header><div><div class="logo">CTRL+Z</div><div class="tag">PARALLEL LIFE LAB / 2026</div></div><div class="chip" id="status">等待啟動</div></header>
+<section class="panel" id="panel"></section>
+<div class="foot">每一個選擇都有代價，沒有完美人生。</div>
 </div>
 <script>
-const stages=[
- {title:"第一關｜夢想還是安穩？",story:"你收到一份穩定的工作邀請，同時也有機會追逐一直想做的夢。你會怎麼選？",options:[
-  {text:"追逐夢想",delta:[2,2,-1],result:"你走向未知，獲得自由，也開始承擔不確定。"},
-  {text:"選擇安穩",delta:[0,-1,2],result:"你擁有穩定生活，卻偶爾想起沒有出發的自己。"}]},
- {title:"第二關｜離開還是留下？",story:"一個重要的人希望你留下，但遠方有一個難得的機會。",options:[
-  {text:"前往新的城市",delta:[2,2,-1],result:"新的城市讓你成長，也讓思念變得真實。"},
-  {text:"留在熟悉的地方",delta:[0,-1,2],result:"你守住珍惜的關係，也放下了一次冒險。"}]},
- {title:"第三關｜重新開始？",story:"你發現現在的人生和想像不同。你會怎麼面對？",options:[
-  {text:"勇敢改變方向",delta:[2,2,0],result:"你沒有抹去過去，而是重新決定下一步。"},
-  {text:"珍惜現在的生活",delta:[1,0,2],result:"你發現另一條路未必更好，現在也值得珍惜。"}]}
+const $=id=>document.getElementById(id),panel=$('panel'),status=$('status'),toast=$('toast');
+let mode='intro',found=false,started=false,sim=false,round=0,history=[],scores={勇氣:50,自由:50,關係:50},path='';
+const scenes=[
+ {q:'畢業那年，你收到兩個機會。你會？',opts:[['追去遠方的夢想',{勇氣:22,自由:17,關係:-14},'dream'],['留在熟悉的城市',{勇氣:-8,自由:-9,關係:18},'home']]},
+ {q:'三年後，你的生活遇到瓶頸。你會？',opts:[['冒險重新開始',{勇氣:18,自由:15,關係:-8},'risk'],['守住眼前的幸福',{勇氣:-5,自由:-9,關係:20},'stay']]},
+ {q:'如果能看見另一個自己，你想問？',opts:[['你真的快樂嗎？',{勇氣:9,自由:6,關係:0},'happy'],['你有後悔嗎？',{勇氣:4,自由:0,關係:9},'regret']]}
 ];
-let stage=0,stats=[0,0,0],history=[],recognized=false;
-const $=id=>document.getElementById(id);
-function render(title,story,buttons,chapter){
- $("heading").textContent=title;
- $("story").textContent=story;
- $("chapter").textContent=chapter;
- $("choices").innerHTML="";
- buttons.forEach(b=>{
-  const btn=document.createElement("button");
-  btn.textContent=b.text;
-  if(b.secondary)btn.className="secondary";
-  btn.onclick=b.action;
-  $("choices").appendChild(btn);
- });
- $("courage").textContent="勇氣 "+stats[0];
- $("freedom").textContent="自由 "+stats[1];
- $("bond").textContent="關係 "+stats[2];
+function stats(){return '<div>'+Object.entries(scores).map(([k,v])=>`<div class="stat"><span>${k}</span><div class="track"><div class="fill" style="width:${v}%"></div></div><b>${v}</b></div>`).join('')+'</div>'}
+function show(t,ms=3200){toast.textContent=t;toast.classList.remove('hidden');clearTimeout(show.timer);show.timer=setTimeout(()=>toast.classList.add('hidden'),ms)}
+function render(){
+ if(mode==='intro'){panel.innerHTML=`<div class="kicker">SYSTEM / 00</div><h1>你的人生，真的只能選一次嗎？</h1><p>掃描《CTRL+Z》海報，打開平行人生入口。每次選擇，都會改寫你的命運值。</p><div class="choices"><button class="primary" onclick="startAR()">啟動 AR 掃描</button><button onclick="demo()">先玩劇情體驗版</button></div>`;return}
+ if(mode==='scan'){panel.innerHTML=`<div class="kicker">TARGET SEARCHING...</div><h1>正在尋找人生入口</h1><p>請用手機鏡頭對準完整的《CTRL+Z》海報，保持明亮、平穩，避免反光。</p><div class="choices"><button onclick="demo()">掃描不到？先試玩劇情</button></div>`;return}
+ if(mode==='ready'){panel.innerHTML=`<div class="kicker">PORTAL UNLOCKED</div><h1>平行人生入口已開啟</h1><p>系統偵測到一個尚未完成的選擇。你準備好看見另一個自己了嗎？</p><button class="primary" style="width:100%" onclick="begin()">進入人生實驗</button>`;return}
+ if(mode==='play'){const s=scenes[round];panel.innerHTML=`<div class="kicker">CHAPTER 0${round+1} / 03</div><h1>${s.q}</h1>${stats()}<div class="choices">${s.opts.map((o,i)=>`<button class="${i===0?'primary':''}" onclick="pick(${i})">${o[0]}</button>`).join('')}</div><div class="row" style="margin-top:10px"><button onclick="undo()">↶ CTRL+Z 上一步</button></div>`;return}
+ if(mode==='end'){let total=scores.勇氣+scores.自由+scores.關係;let ending=total>=190?'隱藏結局｜不必成為完美的自己':scores.勇氣>scores.關係?'平行結局｜勇敢的探險者':'平行結局｜溫柔的守護者';panel.innerHTML=`<div class="kicker">LIFE REPORT / COMPLETE</div><h1>${ending}</h1><p>你看見了另一條路，也看見那條路的代價。真正能改寫的，不是過去，而是下一步。</p>${stats()}<div class="choices"><button class="primary" onclick="undo()">↶ CTRL+Z 重選最後一步</button><button onclick="restart()">重新開始人生實驗</button></div>`}
 }
-function startGame(){
- stage=0;stats=[0,0,0];history=[];
- $("stats").style.display="flex";
- showStage();
+function begin(){mode='play';round=0;history=[];scores={勇氣:50,自由:50,關係:50};render()}
+function pick(i){const o=scenes[round].opts[i];history.push({round,scores:{...scores}});for(const [k,v] of Object.entries(o[1]))scores[k]=Math.max(0,Math.min(100,scores[k]+v));round++;mode=round>=scenes.length?'end':'play';render()}
+function undo(){if(!history.length){show('目前沒有可以復原的選擇');return}let h=history.pop();round=h.round;scores=h.scores;mode='play';show('CTRL+Z：已回到上一個選擇');render()}
+function restart(){begin()}
+function demo(){sim=true;status.textContent='劇情體驗模式';$('posterPreview').style.opacity='.36';mode='ready';render()}
+async function startAR(){
+ mode='scan';render();status.textContent='正在啟動相機';
+ if(!window.isSecureContext){show('需要 HTTPS 才能使用相機');return}
+ try{const scene=document.querySelector('a-scene');if(!scene.hasLoaded)await new Promise(resolve=>scene.addEventListener('loaded',resolve,{once:true}));const ar=scene.systems['mindar-image-system'];if(!ar)throw Error('MindAR 載入失敗');await ar.start();started=true;status.textContent='掃描海報中';$('posterPreview').style.display='none';}
+ catch(e){console.error(e);status.textContent='AR 啟動失敗';show('無法啟動 AR：請檢查 targets.mind、網路與相機權限',7000)}
 }
-function showStage(){
- if(stage>=stages.length)return ending();
- const s=stages[stage];
- render(s.title,s.story,[
-  ...s.options.map((o,i)=>({text:o.text,action:()=>choose(i)})),
-  {text:"↶ CTRL+Z 返回上一關",secondary:true,action:undo}
- ],"LEVEL 0"+(stage+1));
-}
-function choose(i){
- const s=stages[stage],o=s.options[i];
- history.push({stage,stats:[...stats]});
- stats=stats.map((n,j)=>n+o.delta[j]);
- stage++;
- render("命運正在改寫…",o.result,[
-  {text:stage>=stages.length?"查看我的人生結局":"繼續下一關 →",action:showStage},
-  {text:"↶ CTRL+Z 撤銷選擇",secondary:true,action:undo}
- ],"TIMELINE CHANGED");
-}
-function undo(){
- if(!history.length){showStage();return;}
- const old=history.pop();
- stage=old.stage;stats=old.stats;showStage();
-}
-function ending(){
- let title,story;
- if(stats[0]>=5&&stats[1]>=5){
-  title="隱藏結局｜自由的探索者";
-  story="你走過未知，也接受不確定。你的人生不是完美答案，而是你親手寫下的故事。";
- }else if(stats[2]>=4){
-  title="人生結局｜溫柔的守護者";
-  story="你珍惜身邊的人，也學會在關係裡尋找自己的位置。";
- }else{
-  title="人生結局｜正在成長的你";
-  story="沒有一條人生能避開遺憾。重要的不是重來，而是你接下來想怎麼走。";
- }
- render(title,story,[
-  {text:"重新體驗另一條人生",action:startGame},
-  {text:"↶ CTRL+Z 返回選擇",secondary:true,action:undo}
- ],"YOUR PARALLEL LIFE");
-}
-const target=$("target");
-target.addEventListener("targetFound",()=>{
- recognized=true;
- $("status").textContent="海報辨識成功";
- $("portal").style.display="block";
-});
-target.addEventListener("targetLost",()=>{
- recognized=false;
- $("status").textContent="請重新對準海報";
- $("portal").style.display="none";
-});
+$('target').addEventListener('targetFound',()=>{found=true;status.textContent='海報辨識成功';if(mode==='scan'){mode='ready';render();show('平行人生入口已解鎖')}})
+$('target').addEventListener('targetLost',()=>{found=false;if(mode==='scan')status.textContent='請重新對準海報'})
+render();
 </script>
-</body>
-</html>
+</body></html>
